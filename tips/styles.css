@@ -1,0 +1,142 @@
+/* ===== GLOBAL ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #f5f5f5;
+  line-height: 1.6;
+}
+
+/* subtelna warstwa “EM tła” */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 204, 0, 0.05), transparent 40%),
+              radial-gradient(circle at 80% 60%, rgba(255, 255, 255, 0.03), transparent 45%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* wszystko nad tłem */
+main, header {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== HEADER ===== */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 14px 20px;
+
+  display: flex;
+  justify-content: center; /* <- wyśrodkowanie */
+  align-items: center;
+
+  background: rgba(17, 17, 17, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid #333;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* ===== BUTTON ===== */
+.return-btn {
+  display: inline-block;
+
+  padding: 10px 18px;
+  font-family: 'Roboto', sans-serif;
+
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  border: 1px solid #333;
+  border-radius: 6px;
+
+  background: #222;
+  transition: 0.3s ease;
+}
+
+.return-btn:hover {
+  background: #ffcc00;
+  color: #000;
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+  transform: translateY(-1px);
+}
+
+/* ===== MAIN ===== */
+main {
+  padding: 120px 20px 40px;
+  max-width: 1000px;
+  margin: auto;
+  text-align: center; /* <- GLOBALNE WYŚRODKOWANIE TEKSTU */
+}
+
+/* ===== TYPOGRAFIA ===== */
+h1, h2 {
+  font-family: 'Georgia', serif;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+h1 {
+  font-size: 48px;
+  color: #fff;
+  text-shadow: 0 0 15px rgba(255, 204, 0, 0.08);
+}
+
+h2 {
+  font-size: 32px;
+  color: #f0f0f0;
+}
+
+h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 2px;
+  margin: 10px auto 0;
+  background: linear-gradient(90deg, transparent, #ffcc00, transparent);
+}
+
+/* ===== TEKST ===== */
+p, li {
+  font-size: 18px;
+  color: #ddd;
+}
+
+/* ===== LISTY ===== */
+ol, ul {
+  max-width: 800px;
+  margin: auto;
+  padding-left: 0; /* ważne przy centrowaniu */
+  list-style-position: inside; /* <- żeby numerki były równo */
+}
+
+li {
+  margin-bottom: 10px;
+  transition: 0.2s ease;
+}
+
+li:hover {
+  color: #fff;
+}
+
+/* ===== BLOCKQUOTE ===== */
+blockquote {
+  border-left: 4px solid #ffcc00;
+  padding: 15px 15px;
+  color: #ccc;
+  font-style: italic;
+  max-width: 800px;
+  margin: 20px auto;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+}
