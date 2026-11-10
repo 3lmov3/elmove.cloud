@@ -22,7 +22,13 @@ window.cookiehub.load(cpm);
 <meta name="twitter:title" content="O mnie - Mateusz Formicki">
 <meta name="twitter:description" content="Poznaj Mateusza Formickiego - pasjonata ruchu, sztuki i filozofii. Dowiedz się więcej o jego podróży twórczej i wartości, które go inspirują.">
 <meta name="twitter:image" content="mateusz-formicki-twitter-image.jpg">
-  <base href="/lumen/people/mateuszformicki/">
+  <script>
+    if (window.location.pathname.indexOf('/people/') === 0) {
+      var baseEl = document.createElement('base');
+      baseEl.href = '/lumen/people/mateuszformicki/';
+      document.head.appendChild(baseEl);
+    }
+  </script>
   <link rel="stylesheet" href="new-style.css">
   <link rel="preload" href="media/background1.webp" as="image">
 <link rel="preload" href="media/background2.webp" as="image">
@@ -66,12 +72,12 @@ window.cookiehub.load(cpm);
 
   <div class="timeline-container">
   <div class="profile-container">
-      <a href="/index.html" class="elmoveicon">
+      <a href="../../../index.html" class="elmoveicon">
       <img src="icons/elmoveicon.png" alt="Strona główna">
       <span class="tooltip">Strona główna</span>
     </a>
   <div class="profile-photo">
-      <a href="/index.html" title="Strona główna"><img src="morda.jpeg" alt="Moja twarz"></a>
+      <a href="../../../index.html" title="Strona główna"><img src="morda.jpeg" alt="Moja twarz"></a>
   </div>
 <a href="https://southbreath.blogspot.com" target="_blank" rel="noopener noreferrer" class="blogger-icon">
   <img src="https://www.blogger.com/img/logo_blogger_40px.png" alt="Blogger" class="blogger-icon-img">

@@ -14,7 +14,7 @@ html, body {
     rgba(15, 15, 20, 0.92),
     rgba(5, 5, 10, 0.95)
   ),
-  url('media/background_body.png') center/cover fixed;
+  url('media/background_body.webp') center/cover fixed;
 
   background-image: linear-gradient(
     to bottom,
