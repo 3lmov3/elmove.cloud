@@ -2,6 +2,8 @@
 <html lang="pl">
 
 <head>
+<script src="../elmove-app.js"></script>
+
   <script src="https://cdn.cookiehub.eu/c2/3e94fd47.js"></script>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -25,14 +27,14 @@ window.cookiehub.load(cpm);
   <meta property="og:title" content="Elation's Hyperclock">
   <meta property="og:description"
     content="Dynamiczny zegar o neonowym efekcie — pulsujące wskazówki i światła.">
-  <meta property="og:image" content="https://3lmov3.github.io/elmove.cloud/app-icon.png">
+  <meta property="og:image" content="elmovelogo.png">
   <meta property="og:url" content="https://www.elmove.cloud/hyperclock">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Elation's Hyperclock">
   <meta name="twitter:description"
     content="Dynamiczny zegar o neonowym efekcie — pulsujące wskazówki i światła.">
-  <meta name="twitter:image" content="https://3lmov3.github.io/elmove.cloud/app-icon.png">
+  <meta name="twitter:image" content="summary.png">
 
   <style>
 
@@ -62,7 +64,7 @@ window.cookiehub.load(cpm);
       overflow: hidden;
 
       background:
-        url('../images/tlo.jpg')
+        url('/images/tlo.jpg')
         no-repeat center / cover;
 
       position: relative;
@@ -150,11 +152,11 @@ window.cookiehub.load(cpm);
       transform-origin: center center;
       transform-style: preserve-3d;
 
-      width: 14vmin;
-      height: 14vmin;
+      width: 12vmin;
+      height: 18vmin;
 
-      max-width: 90px;
-      max-height: 90px;
+      max-width: 72px;
+      max-height: 110px;
 
       object-fit: contain;
 
@@ -166,7 +168,9 @@ window.cookiehub.load(cpm);
         linear
         infinite;
 
+      /* czarny symbol → jasny neonowy */
       filter:
+        invert(1)
         drop-shadow(0 0 8px cyan)
         drop-shadow(0 0 20px #00ffff)
         drop-shadow(0 0 40px #0088ff);
@@ -174,6 +178,7 @@ window.cookiehub.load(cpm);
       opacity: 0.95;
 
       backface-visibility: visible;
+      cursor: pointer;
     }
 
 
@@ -732,15 +737,14 @@ window.cookiehub.load(cpm);
            ===================================================== -->
 
       <a
-        href="../index.html"
-        target="_blank"
-        rel="noopener noreferrer"
-        id="logo-link">
+        href="/index.html"
+        id="logo-link"
+        title="Strona główna">
 
         <img
           id="center-logo"
-          src="../app-icon.png"
-          alt="Elmove – strona główna">
+          src="/images/hyperclock-symbol.png"
+          alt="EM – symbol Hiperzegara">
 
       </a>
 
@@ -1860,87 +1864,56 @@ window.cookiehub.load(cpm);
 
 
     // =========================================================
-    // WEBSOCKET
+    // SOCKET.IO – impulsy do wszystkich użytkowników
     // =========================================================
 
-    const ws =
-      new WebSocket(
-        "wss://hyperclock-server.onrender.com"
-      );
+    const script = document.createElement('script');
+    script.src = '/socket.io/socket.io.js';
+    document.head.appendChild(script);
 
+    let socket = null;
 
-    ws.onopen = () => {
-
-      console.log(
-        "WS connected"
-      );
-
+    script.onload = () => {
+      socket = io();
+      socket.on('connect', () => {
+        console.log('Hyperclock connected');
+        // Po otwarciu zakładki – wyślij impuls do wszystkich
+        socket.emit('hyperclock:open');
+      });
+      socket.on('hyperclock:impulse', () => {
+        triggerSparkFlash();
+      });
+      socket.on('hyperclock:pulse', () => {
+        triggerSparkFlash();
+      });
     };
-
-
-    ws.onmessage = event => {
-
-      try {
-
-        const msg =
-          JSON.parse(
-            event.data
-          );
-
-
-        console.log(
-          "WS EVENT:",
-          msg
-        );
-
-
-        if (
-          msg.type ===
-            "user_joined" ||
-
-          msg.type ===
-            "user_left" ||
-
-          msg.type ===
-            "pulse"
-        ) {
-
-          triggerSparkFlash();
-
-        }
-
-      }
-
-      catch (error) {
-
-        console.error(
-          error
-        );
-
-      }
-
-    };
-
-
-    // =========================================================
-    // WYSYŁANIE PULSE
-    // =========================================================
 
     function sendPulse() {
-
-      if (
-        ws.readyState === 1
-      ) {
-
-        ws.send(
-          JSON.stringify({
-            type: "pulse"
-          })
-        );
-
+      if (socket && socket.connected) {
+        socket.emit('hyperclock:pulse', { type: 'pulse' });
       }
-
+      triggerSparkFlash();
     }
+
+    // Kliknięcie w centrum zegara → strona główna (bez nowej karty)
+    document.addEventListener('DOMContentLoaded', () => {
+      const centerLogo = document.getElementById('center-logo');
+      const clockContainer = document.getElementById('clock-container');
+      const clickTarget = centerLogo || clockContainer;
+      if (clickTarget) {
+        clickTarget.style.cursor = 'pointer';
+        clickTarget.addEventListener('click', (e) => {
+          // tylko środek – unikamy kliknięć na wskazówki jeśli tożsamość elementu pozwala
+          const rect = clickTarget.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+          if (dist < Math.min(rect.width, rect.height) * 0.25) {
+            window.location.href = '/index.html';
+          }
+        });
+      }
+    });
 
 
     // =========================================================

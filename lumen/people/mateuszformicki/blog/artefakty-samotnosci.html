@@ -89,7 +89,6 @@
 
     .sanctuary-layout {
       position: relative;
-      z-index: 1;
       display: grid;
       grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
       min-height: 100vh;
@@ -112,7 +111,7 @@
       flex-direction: column;
       overflow: hidden;
       transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
-      z-index: 30;
+      z-index: 40;
     }
 
     body.focus-mode .sanctuary-index {
@@ -236,7 +235,10 @@
 
     .index-scroll {
       flex: 1 1 auto;
+      min-height: 0;
       overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
       padding: 12px 10px 18px;
       scrollbar-width: thin;
       scrollbar-color: rgba(198, 169, 106, 0.25) transparent;
@@ -427,6 +429,8 @@
 
     /* ================= GŁÓWNA SCENA WIERSZA ================= */
     .sanctuary-stage {
+      position: relative;
+      z-index: 1;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -967,31 +971,69 @@
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 25;
-      background: rgba(0, 0, 0, 0.68);
+      z-index: 30;
+      background: rgba(0, 0, 0, 0.72);
       backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      touch-action: none;
     }
 
     /* ================= RESPONSYWNOŚĆ ================= */
     @media (max-width: 940px) {
-      .sanctuary-layout {
-        grid-template-columns: 1fr;
+      .sanctuary-layout,
+      body.focus-mode .sanctuary-layout {
+        grid-template-columns: minmax(0, 1fr);
       }
       .sanctuary-index {
         position: fixed;
         left: 0;
         top: 0;
         bottom: 0;
+        height: auto;
         width: min(320px, 86vw);
+        z-index: 40;
+        background: linear-gradient(180deg, #16130f 0%, #0d0c09 100%);
+        box-shadow: 14px 0 44px rgba(0, 0, 0, 0.85);
         transform: translateX(-100%);
+        opacity: 1;
+        pointer-events: none;
+        visibility: hidden;
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.35s;
+      }
+      body.focus-mode .sanctuary-index {
+        opacity: 1;
+      }
+      body.drawer-open {
+        overflow: hidden;
       }
       body.drawer-open .sanctuary-index {
         transform: translateX(0);
         opacity: 1;
         pointer-events: auto;
+        visibility: visible;
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0s;
       }
       body.drawer-open .drawer-backdrop {
         display: block;
+      }
+      .index-brand {
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-left: max(20px, env(safe-area-inset-left));
+      }
+      .index-search input {
+        font-size: 1rem;
+      }
+      .chapter-header {
+        padding: 9px 10px;
+      }
+      .tab-item {
+        padding: 10px 10px 10px 12px;
+        font-size: 1.04rem;
+      }
+      .index-footer {
+        background: #0b0a08;
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
       }
       .mobile-menu-btn {
         display: inline-flex;
@@ -1003,6 +1045,12 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-color: rgba(198, 169, 106, 0.36);
+        background: rgba(198, 169, 106, 0.08);
+        color: var(--gold-bright);
+        font-size: 1.05rem;
       }
       .stage-crumb {
         display: none;
@@ -1078,7 +1126,7 @@
     <main class="sanctuary-stage">
       <header class="stage-bar">
         <div class="stage-bar__left">
-          <button type="button" class="bar-btn mobile-menu-btn" id="mobileMenuBtn">☰ Spis wierszy</button>
+          <button type="button" class="bar-btn mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="sanctuaryIndex">☰ Spis wierszy</button>
           <button type="button" class="bar-btn desktop-focus-btn" id="focusToggleBtn" title="Ukryj lub pokaż boczny indeks">⇤ Skupienie</button>
           <span class="stage-crumb" id="stageCrumb">Próg Księgi</span>
         </div>
@@ -1361,7 +1409,7 @@
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        document.body.classList.remove("drawer-open");
+        closeDrawer();
       }
 
       function resolveHashIndex() {
@@ -1423,9 +1471,15 @@
       // Strzałki klawiatury
       document.addEventListener("keydown", function(e) {
         if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
-        if (e.key === "Escape" && coverModal.classList.contains("open")) {
-          coverModal.classList.remove("open");
-          return;
+        if (e.key === "Escape") {
+          if (coverModal.classList.contains("open")) {
+            coverModal.classList.remove("open");
+            return;
+          }
+          if (document.body.classList.contains("drawer-open")) {
+            closeDrawer();
+            return;
+          }
         }
         if (e.key === "ArrowRight" && currentIndex < POEMS.length - 1) {
           renderPoem(currentIndex + 1);
@@ -1456,15 +1510,18 @@
       });
 
       // Szuflada mobilna
-      document.getElementById("mobileMenuBtn").addEventListener("click", function() {
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      function openDrawer() {
         document.body.classList.add("drawer-open");
-      });
-      document.getElementById("mobileCloseBtn").addEventListener("click", function() {
+        if (mobileMenuBtn) mobileMenuBtn.setAttribute("aria-expanded", "true");
+      }
+      function closeDrawer() {
         document.body.classList.remove("drawer-open");
-      });
-      document.getElementById("drawerBackdrop").addEventListener("click", function() {
-        document.body.classList.remove("drawer-open");
-      });
+        if (mobileMenuBtn) mobileMenuBtn.setAttribute("aria-expanded", "false");
+      }
+      mobileMenuBtn.addEventListener("click", openDrawer);
+      document.getElementById("mobileCloseBtn").addEventListener("click", closeDrawer);
+      document.getElementById("drawerBackdrop").addEventListener("click", closeDrawer);
 
       // Rozmiar liter
       document.getElementById("fontDecBtn").addEventListener("click", function() {
@@ -1480,6 +1537,7 @@
 
       // Modal okładki
       document.getElementById("openCoverBtn").addEventListener("click", function() {
+        closeDrawer();
         coverModal.classList.add("open");
       });
       document.getElementById("closeCoverBtn").addEventListener("click", function() {
@@ -1500,5 +1558,5 @@
       renderPoem(resolveHashIndex(), false, false);
     })();
   </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a587d5669972c40d',t:'MTc5NDM0MjgyMA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a587d5669972c40d',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

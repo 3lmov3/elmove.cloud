@@ -13,3 +13,4 @@ RewriteRule ^people/formmantcse/blog/?$ /lumen/people/mateuszformicki/blog/blog.
 RewriteRule ^people/formmantcse/artefakty/?$ /lumen/people/mateuszformicki/blog/artefakty-samotnosci.html [L,NC]
 RewriteRule ^people/formmantcse/portfolio/?$ /lumen/people/mateuszformicki/eportfolio/portfolio.html [L,NC]
 RewriteRule ^hyperclock/?$ /hyperclockhtml/hyperclock.html [L,NC]
+,NC]

@@ -54,7 +54,7 @@ window.cookiehub.load(cpm);
     <p><i>~ Zipera</i></p>
   </header>
 
-  <a href="../index.html" class="home-bar" id="home-bar-link">
+  <a href="/index.html" class="home-bar" id="home-bar-link">
     <span>H</span>
     <span>O</span>
     <span>M</span>
@@ -197,7 +197,7 @@ window.cookiehub.load(cpm);
             img.src = item.photo;
             img.alt = item.name;
             img.className = "sidebar-img";
-            img.onerror = function() { this.src = '../app-icon.png'; };
+            img.onerror = function() { this.src = '/images/elmovelogo.png'; };
 
             const span = document.createElement("span");
             span.textContent = item.name;
@@ -427,7 +427,7 @@ window.cookiehub.load(cpm);
     // Fix HOME – same window
     document.getElementById('home-bar-link').addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.href = '../index.html';
+      window.location.href = '/index.html';
     });
 
     document.getElementById('add-cancel').onclick = () => {
@@ -448,65 +448,43 @@ window.cookiehub.load(cpm);
     document.getElementById('add-modal').addEventListener('click', function (e) {
       if (e.target === this) this.style.display = 'none';
     });
-    // Wysyłka zgłoszenia na e-mail przez FormSubmit (losowy alias zamiast adresu)
-    const LUMEN_FORM_ID = 'd70f57fef3543c4044d162de4f124d13';
-    const LUMEN_MAX_BYTES = 10 * 1024 * 1024; // limit FormSubmit: 10 MB na zgłoszenie
-
     document.getElementById('add-submit').onclick = async () => {
       const name = document.getElementById('add-name').value.trim();
       const type = document.getElementById('add-type').value;
       const description = document.getElementById('add-desc').value.trim();
       const files = document.getElementById('add-files').files;
       const status = document.getElementById('add-status');
-      const btn = document.getElementById('add-submit');
       if (!name) { status.textContent = 'Podaj nazwę.'; status.style.color = '#c33'; return; }
       if (!files.length) { status.textContent = 'Dodaj przynajmniej jeden plik.'; status.style.color = '#c33'; return; }
 
-      let total = 0;
-      for (const f of files) total += f.size;
-      if (total > LUMEN_MAX_BYTES) {
-        status.textContent = 'Pliki są za duże (' + (total / 1048576).toFixed(1) + ' MB). Limit to 10 MB łącznie.';
-        status.style.color = '#c33';
-        return;
-      }
-      if (LUMEN_FORM_ID.indexOf('WSTAW') === 0) {
-        status.textContent = 'Formularz jest jeszcze nieaktywny.';
-        status.style.color = '#c33';
-        return;
-      }
-
-      const typeLabels = { person: 'Osoba', team: 'Zespół', organization: 'Organizacja' };
       const fd = new FormData();
-      fd.append('_subject', 'Lumen: nowe zgłoszenie – ' + name);
-      fd.append('_captcha', 'false');
-      fd.append('_template', 'table');
-      fd.append('_honey', '');
-      fd.append('Typ', typeLabels[type] || type);
-      fd.append('Nazwa', name);
-      fd.append('Opis', description || '(brak)');
-      for (let i = 0; i < files.length; i++) fd.append('plik' + (i + 1), files[i], files[i].name);
+      fd.append('name', name);
+      fd.append('type', type);
+      fd.append('description', description);
+      for (let i = 0; i < files.length; i++) fd.append('files', files[i]);
 
-      btn.disabled = true;
       status.textContent = 'Wysyłanie…';
       status.style.color = '#d4af37';
       try {
-        // no-cors: nie czytamy odpowiedzi, ale zgłoszenie dochodzi na maila
-        await fetch('https://formsubmit.co/' + LUMEN_FORM_ID, { method: 'POST', body: fd, mode: 'no-cors' });
-        status.textContent = 'Wysłano! Zgłoszenie czeka na moderację.';
-        status.style.color = '#0a0';
-        setTimeout(() => {
-          document.getElementById('add-modal').style.display = 'none';
-          status.textContent = '';
-          document.getElementById('add-name').value = '';
-          document.getElementById('add-desc').value = '';
-          document.getElementById('add-files').value = '';
-          document.querySelector('#add-modal .am-file-label').innerHTML = '<strong>Kliknij lub upuść</strong><br>html · js · css · obrazy';
-          btn.disabled = false;
-        }, 2000);
+        const res = await fetch('/api/lumen/submit', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.ok) {
+          status.textContent = 'Wysłano! Oczekuje na zatwierdzenie admina.';
+          status.style.color = '#0a0';
+          setTimeout(() => {
+            document.getElementById('add-modal').style.display = 'none';
+            status.textContent = '';
+            document.getElementById('add-name').value = '';
+            document.getElementById('add-desc').value = '';
+            document.getElementById('add-files').value = '';
+          }, 2000);
+        } else {
+          status.textContent = 'Błąd: ' + (data.error || 'nieznany');
+          status.style.color = '#c33';
+        }
       } catch (err) {
         status.textContent = 'Błąd sieci: ' + err.message;
         status.style.color = '#c33';
-        btn.disabled = false;
       }
     };
 
@@ -515,7 +493,7 @@ window.cookiehub.load(cpm);
       img.addEventListener('error', function() {
         if (!this.dataset.emFallback) {
           this.dataset.emFallback = '1';
-          this.src = '../app-icon.png';
+          this.src = '/images/elmovelogo.png';
         }
       });
     });
