@@ -54,7 +54,7 @@ window.cookiehub.load(cpm);
     <p><i>~ Zipera</i></p>
   </header>
 
-  <a href="/index.html" class="home-bar" id="home-bar-link">
+  <a href="index.html" class="home-bar" id="home-bar-link">
     <span>H</span>
     <span>O</span>
     <span>M</span>
@@ -197,7 +197,7 @@ window.cookiehub.load(cpm);
             img.src = item.photo;
             img.alt = item.name;
             img.className = "sidebar-img";
-            img.onerror = function() { this.src = '/images/elmovelogo.png'; };
+            img.onerror = function() { this.src = 'images/elmovelogo.png'; };
 
             const span = document.createElement("span");
             span.textContent = item.name;
@@ -427,7 +427,7 @@ window.cookiehub.load(cpm);
     // Fix HOME – same window
     document.getElementById('home-bar-link').addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.href = '/index.html';
+      window.location.href = 'index.html';
     });
 
     document.getElementById('add-cancel').onclick = () => {
@@ -493,7 +493,7 @@ window.cookiehub.load(cpm);
       img.addEventListener('error', function() {
         if (!this.dataset.emFallback) {
           this.dataset.emFallback = '1';
-          this.src = '/images/elmovelogo.png';
+          this.src = 'images/elmovelogo.png';
         }
       });
     });
