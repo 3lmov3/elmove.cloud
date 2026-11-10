@@ -23,7 +23,7 @@ window.cookiehub.load(cpm);
   <meta property="og:title" content="Elation Movement – Lumen">
   <meta property="og:description"
     content="Lumen to przestrzeń, która niesie światło nadziei i inspiracji, budując organizacje i cele, które zmieniają świat na lepsze.">
-  <meta property="og:image" content="https://3lmov3.github.io/elmove.cloud/app-icon.png">
+  <meta property="og:image" content="https://www.elmove.cloud/images/elmovelogo.png">
   <meta property="og:url" content="https://www.elmove.cloud/lumen">
 
   <!-- Twitter Card -->
@@ -31,7 +31,7 @@ window.cookiehub.load(cpm);
   <meta name="twitter:title" content="Elation Movement – Lumen">
   <meta name="twitter:description"
     content="Lumen to przestrzeń, która niesie światło nadziei i inspiracji, budując organizacje i cele, które zmieniają świat na lepsze.">
-  <meta name="twitter:image" content="https://3lmov3.github.io/elmove.cloud/app-icon.png">
+  <meta name="twitter:image" content="https://www.elmove.cloud/images/elmovelogo.png">
 
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -54,7 +54,7 @@ window.cookiehub.load(cpm);
     <p><i>~ Zipera</i></p>
   </header>
 
-  <a href="index.html" class="home-bar" id="home-bar-link">
+  <a href="https://www.elmove.cloud/" class="home-bar" id="home-bar-link">
     <span>H</span>
     <span>O</span>
     <span>M</span>
@@ -115,6 +115,7 @@ window.cookiehub.load(cpm);
           img.src = item.photo;
           img.alt = item.name;
           img.className = "sidebar-img";
+          img.onerror = function() { this.onerror = null; this.src = 'images/elmovelogo.png'; };
 
           a.appendChild(span);
           a.appendChild(img);
@@ -197,7 +198,7 @@ window.cookiehub.load(cpm);
             img.src = item.photo;
             img.alt = item.name;
             img.className = "sidebar-img";
-            img.onerror = function() { this.src = 'images/elmovelogo.png'; };
+            img.onerror = function() { this.onerror = null; this.src = 'images/elmovelogo.png'; };
 
             const span = document.createElement("span");
             span.textContent = item.name;
@@ -424,10 +425,13 @@ window.cookiehub.load(cpm);
   </div>
 
   <script>
+    // FormSubmit (konto aktywowane) – zgłoszenia lecą na elationmovement@gmail.com
+    const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/elationmovement@gmail.com';
+
     // Fix HOME – same window
     document.getElementById('home-bar-link').addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.href = 'index.html';
+      window.location.href = 'https://www.elmove.cloud/';
     });
 
     document.getElementById('add-cancel').onclick = () => {
@@ -457,19 +461,41 @@ window.cookiehub.load(cpm);
       if (!name) { status.textContent = 'Podaj nazwę.'; status.style.color = '#c33'; return; }
       if (!files.length) { status.textContent = 'Dodaj przynajmniej jeden plik.'; status.style.color = '#c33'; return; }
 
+      // FormSubmit: maks. 10 MB łącznie na zgłoszenie
+      let totalSize = 0;
+      for (let i = 0; i < files.length; i++) totalSize += files[i].size;
+      if (totalSize > 10 * 1024 * 1024) {
+        status.textContent = 'Pliki są za duże — FormSubmit przyjmuje maks. 10 MB łącznie.';
+        status.style.color = '#c33';
+        return;
+      }
+
       const fd = new FormData();
       fd.append('name', name);
       fd.append('type', type);
       fd.append('description', description);
-      for (let i = 0; i < files.length; i++) fd.append('files', files[i]);
+      // pola zaczynające się od _ to opcje FormSubmit
+      fd.append('_subject', 'Lumen – zgłoszenie: ' + name);
+      fd.append('_template', 'table');
+      fd.append('_honey', '');
+      for (let i = 0; i < files.length; i++) fd.append('attachment', files[i]);
 
       status.textContent = 'Wysyłanie…';
       status.style.color = '#d4af37';
       try {
-        const res = await fetch('/api/lumen/submit', { method: 'POST', body: fd });
+        const res = await fetch(FORMSUBMIT_ENDPOINT, {
+          method: 'POST',
+          body: fd,
+          headers: { 'Accept': 'application/json' }
+        });
+        const contentType = res.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          throw new Error('FormSubmit zwrócił stronę zamiast JSON (' + res.status + '). Sprawdź, czy formularz/konto jest aktywne.');
+        }
         const data = await res.json();
-        if (data.ok) {
-          status.textContent = 'Wysłano! Oczekuje na zatwierdzenie admina.';
+        const succeeded = res.ok && (data.success === 'true' || data.success === true);
+        if (succeeded) {
+          status.textContent = 'Wysłano! Zgłoszenie trafiło na maila do moderacji.';
           status.style.color = '#0a0';
           setTimeout(() => {
             document.getElementById('add-modal').style.display = 'none';
@@ -479,11 +505,11 @@ window.cookiehub.load(cpm);
             document.getElementById('add-files').value = '';
           }, 2000);
         } else {
-          status.textContent = 'Błąd: ' + (data.error || 'nieznany');
+          status.textContent = 'Błąd: ' + (data.message || data.error || 'nieznany');
           status.style.color = '#c33';
         }
       } catch (err) {
-        status.textContent = 'Błąd sieci: ' + err.message;
+        status.textContent = 'Błąd: ' + err.message;
         status.style.color = '#c33';
       }
     };
@@ -498,5 +524,5 @@ window.cookiehub.load(cpm);
       });
     });
   </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5888c61cba812f9',t:'MTc5NDM1MDMxNQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5888c61cba812f9',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
