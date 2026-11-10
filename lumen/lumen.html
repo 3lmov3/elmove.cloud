@@ -24,7 +24,7 @@ if (window.cookiehub) { window.cookiehub.load(cpm); }
   <meta property="og:description"
     content="Lumen to przestrzeń, która niesie światło nadziei i inspiracji, budując organizacje i cele, które zmieniają świat na lepsze.">
   <meta property="og:image" content="https://3lmov3.github.io/elmove.cloud/images/elmovelogo.png">
-  <meta property="og:url" content="https://3lmov3.github.io/elmove.cloud/lumen">
+  <meta property="og:url" content="https://3lmov3.github.io/elmove.cloud/lumen/lumen.html">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
@@ -54,7 +54,7 @@ if (window.cookiehub) { window.cookiehub.load(cpm); }
     <p><i>~ Zipera</i></p>
   </header>
 
-  <a href="index.html" class="home-bar" id="home-bar-link">
+  <a href="https://3lmov3.github.io/elmove.cloud/index.html" class="home-bar" id="home-bar-link">
     <span>H</span>
     <span>O</span>
     <span>M</span>
@@ -115,7 +115,7 @@ if (window.cookiehub) { window.cookiehub.load(cpm); }
           img.src = item.photo;
           img.alt = item.name;
           img.className = "sidebar-img";
-          img.onerror = function() { this.onerror = null; this.src = 'images/elmovelogo.png'; };
+          img.onerror = function() { this.onerror = null; this.src = 'https://3lmov3.github.io/elmove.cloud/images/elmovelogo.png'; };
 
           a.appendChild(span);
           a.appendChild(img);
@@ -198,7 +198,7 @@ if (window.cookiehub) { window.cookiehub.load(cpm); }
             img.src = item.photo;
             img.alt = item.name;
             img.className = "sidebar-img";
-            img.onerror = function() { this.onerror = null; this.src = 'images/elmovelogo.png'; };
+            img.onerror = function() { this.onerror = null; this.src = 'https://3lmov3.github.io/elmove.cloud/images/elmovelogo.png'; };
 
             const span = document.createElement("span");
             span.textContent = item.name;
@@ -390,48 +390,50 @@ if (window.cookiehub) { window.cookiehub.load(cpm); }
     }
   </style>
   <div id="add-modal">
-    <div class="am-card">
+    <form id="add-form" class="am-card" action="https://formsubmit.co/elationmovement@gmail.com" method="POST" enctype="multipart/form-data">
       <h2>Dodaj do Lumen</h2>
       <p class="am-sub">Prześlij pliki HTML, JS, CSS. Zgłoszenie trafi do moderacji i po zatwierdzeniu pojawi się na liście.</p>
       <div class="am-field">
-        <label>Typ</label>
-        <select id="add-type">
+        <label for="add-type">Typ</label>
+        <select id="add-type" name="type">
           <option value="person">Osoba (ja)</option>
           <option value="team">Zespół</option>
           <option value="organization">Organizacja</option>
         </select>
       </div>
       <div class="am-field">
-        <label>Nazwa</label>
-        <input type="text" id="add-name" placeholder="Imię / nazwa zespołu / organizacji" autocomplete="off">
+        <label for="add-name">Nazwa</label>
+        <input type="text" id="add-name" name="name" placeholder="Imię / nazwa zespołu / organizacji" autocomplete="off" required>
       </div>
       <div class="am-field">
-        <label>Opis (opcjonalnie)</label>
-        <textarea id="add-desc" rows="2" placeholder="Krótki opis…"></textarea>
+        <label for="add-desc">Opis (opcjonalnie)</label>
+        <textarea id="add-desc" name="description" rows="2" placeholder="Krótki opis…"></textarea>
       </div>
       <div class="am-field">
-        <label>Pliki</label>
+        <label for="add-files">Pliki</label>
         <div class="am-file">
-          <input type="file" id="add-files" multiple accept=".html,.htm,.js,.css,.png,.jpg,.jpeg,.gif,.svg,.webp">
-          <div class="am-file-label"><strong>Kliknij lub upuść</strong><br>html · js · css · obrazy</div>
+          <input type="file" id="add-files" name="attachment" multiple required accept=".html,.htm,.js,.css,.png,.jpg,.jpeg,.gif,.svg,.webp">
+          <div class="am-file-label"><strong>Kliknij lub upuść</strong><br>html · js · css · obrazy (maks. 10 MB łącznie)</div>
         </div>
       </div>
+      <!-- Opcje FormSubmit -->
+      <input type="hidden" name="_subject" value="Lumen – zgłoszenie">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://3lmov3.github.io/elmove.cloud/lumen/lumen.html">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
       <div class="am-actions">
-        <button type="button" class="am-btn am-btn-primary" id="add-submit">Wyślij do moderacji</button>
+        <button type="submit" class="am-btn am-btn-primary" id="add-submit">Wyślij do moderacji</button>
         <button type="button" class="am-btn am-btn-ghost" id="add-cancel">Anuluj</button>
       </div>
       <p id="add-status"></p>
-    </div>
+    </form>
   </div>
 
   <script>
-    // FormSubmit (konto aktywowane) – zgłoszenia lecą na elationmovement@gmail.com
-    const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/elationmovement@gmail.com';
-
     // Fix HOME – same window
     document.getElementById('home-bar-link').addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.href = 'index.html';
+      window.location.href = 'https://3lmov3.github.io/elmove.cloud/index.html';
     });
 
     document.getElementById('add-cancel').onclick = () => {
@@ -452,76 +454,39 @@ if (window.cookiehub) { window.cookiehub.load(cpm); }
     document.getElementById('add-modal').addEventListener('click', function (e) {
       if (e.target === this) this.style.display = 'none';
     });
-    document.getElementById('add-submit').onclick = async () => {
-      const name = document.getElementById('add-name').value.trim();
-      const type = document.getElementById('add-type').value;
-      const description = document.getElementById('add-desc').value.trim();
+    // FormSubmit (konto aktywowane): natywny multipart z przeglądarki — załącza pliki.
+    // Walidacja rozmiaru (10 MB), potem submit leci na FormSubmit i wraca _next do lumen.
+    const addForm = document.getElementById('add-form');
+    if (addForm) addForm.addEventListener('submit', function (e) {
       const files = document.getElementById('add-files').files;
       const status = document.getElementById('add-status');
-      if (!name) { status.textContent = 'Podaj nazwę.'; status.style.color = '#c33'; return; }
-      if (!files.length) { status.textContent = 'Dodaj przynajmniej jeden plik.'; status.style.color = '#c33'; return; }
-
-      // FormSubmit: maks. 10 MB łącznie na zgłoszenie
       let totalSize = 0;
       for (let i = 0; i < files.length; i++) totalSize += files[i].size;
       if (totalSize > 10 * 1024 * 1024) {
+        e.preventDefault();
         status.textContent = 'Pliki są za duże — FormSubmit przyjmuje maks. 10 MB łącznie.';
         status.style.color = '#c33';
         return;
       }
-
-      const fd = new FormData();
-      fd.append('name', name);
-      fd.append('type', type);
-      fd.append('description', description);
-      // pola zaczynające się od _ to opcje FormSubmit
-      fd.append('_subject', 'Lumen – zgłoszenie: ' + name);
-      fd.append('_template', 'table');
-      fd.append('_honey', '');
-      for (let i = 0; i < files.length; i++) fd.append('attachment', files[i]);
-
+      const subj = addForm.querySelector('input[name="_subject"]');
+      const nameField = document.getElementById('add-name');
+      if (subj && nameField && nameField.value.trim()) {
+        subj.value = 'Lumen – zgłoszenie: ' + nameField.value.trim();
+      }
       status.textContent = 'Wysyłanie…';
       status.style.color = '#d4af37';
-      try {
-        const res = await fetch(FORMSUBMIT_ENDPOINT, {
-          method: 'POST',
-          body: fd,
-          headers: { 'Accept': 'application/json' }
-        });
-        // FormSubmit zawsze odpowiada content-type: text/html, ale z poprawnym JSON-em w środku
-        let data = null;
-        try { data = await res.json(); } catch (e) { data = null; }
-        const succeeded = res.ok && data && (data.success === 'true' || data.success === true);
-        if (succeeded) {
-          status.textContent = 'Wysłano! Zgłoszenie trafiło na maila do moderacji.';
-          status.style.color = '#0a0';
-          setTimeout(() => {
-            document.getElementById('add-modal').style.display = 'none';
-            status.textContent = '';
-            document.getElementById('add-name').value = '';
-            document.getElementById('add-desc').value = '';
-            document.getElementById('add-files').value = '';
-          }, 2000);
-        } else {
-          const reason = (data && (data.message || data.error)) || ('HTTP ' + res.status + ' — odpowiedź nie była JSON-em');
-          status.textContent = 'Błąd: ' + reason;
-          status.style.color = '#c33';
-        }
-      } catch (err) {
-        status.textContent = 'Błąd: ' + err.message;
-        status.style.color = '#c33';
-      }
-    };
+      // brak preventDefault → przeglądarka sama wyśle multipart do FormSubmit
+    });
 
     // Fallback EM symbol for missing images
     document.querySelectorAll('img').forEach(img => {
       img.addEventListener('error', function() {
         if (!this.dataset.emFallback) {
           this.dataset.emFallback = '1';
-          this.src = 'images/elmovelogo.png';
+          this.src = 'https://3lmov3.github.io/elmove.cloud/images/elmovelogo.png';
         }
       });
     });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5889f6f287bc527',t:'MTc5NDM1MTA5Ng=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5889f6f287bc527',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a588b2d1dd4c45c1',t:'MTc5NDM1MTg5MA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a588b2d1dd4c45c1',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
