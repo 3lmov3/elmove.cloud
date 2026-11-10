@@ -12,8 +12,8 @@
 :root {
   color-scheme: dark;
   --bg-obsidian: #0b0a08;
-  --glass-top: rgba(20, 18, 14, 0.84);
-  --glass-bottom: rgba(12, 11, 9, 0.91);
+  --glass-top: rgba(20, 18, 14, 0.92);
+  --glass-bottom: rgba(12, 11, 9, 0.96);
   --gold: #c6a96a;
   --gold-bright: #ead6a0;
   --gold-warm: #f2c879;
@@ -34,7 +34,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   background-color: var(--bg-obsidian);
   scrollbar-width: thin;
   scrollbar-color: rgba(198, 169, 106, 0.32) #0b0a08;
@@ -63,16 +62,33 @@ body {
   font-family: var(--font-serif);
   color: var(--text-body);
   background-color: var(--bg-obsidian);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Wydzielona warstwa tła na GPU zamiast ciężkiego background-attachment: fixed */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--bg-obsidian);
   background-image:
     radial-gradient(ellipse 80% 55% at 50% 12%, rgba(42, 30, 22, 0.38) 0%, rgba(12, 11, 9, 0.78) 68%, rgba(9, 8, 7, 0.92) 100%),
     linear-gradient(180deg, rgba(12, 10, 9, 0.48) 0%, rgba(11, 10, 8, 0.76) 50%, rgba(9, 8, 7, 0.92) 100%),
     url('obraz.png');
+  background-image:
+    radial-gradient(ellipse 80% 55% at 50% 12%, rgba(42, 30, 22, 0.38) 0%, rgba(12, 11, 9, 0.78) 68%, rgba(9, 8, 7, 0.92) 100%),
+    linear-gradient(180deg, rgba(12, 10, 9, 0.48) 0%, rgba(11, 10, 8, 0.76) 50%, rgba(9, 8, 7, 0.92) 100%),
+    image-set(
+      url('obraz.webp') type('image/webp'),
+      url('obraz.png') type('image/png')
+    );
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  transform: translateZ(0);
 }
 
 /* Subtelna poświata u szczytu ekranu */
@@ -99,11 +115,9 @@ header {
   margin: 42px auto 26px;
   padding: 38px 32px 32px;
   text-align: center;
-  background: linear-gradient(180deg, rgba(22, 19, 15, 0.82) 0%, rgba(13, 12, 9, 0.90) 100%);
+  background: linear-gradient(180deg, rgba(22, 19, 15, 0.92) 0%, rgba(13, 12, 9, 0.96) 100%);
   border: 1px solid var(--gold-line);
   border-radius: 18px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   box-shadow:
     0 22px 60px rgba(0, 0, 0, 0.58),
     inset 0 1px 0 rgba(255, 243, 214, 0.07);
@@ -170,13 +184,11 @@ header::after {
   padding: 15px 26px;
   margin: 0 0 38px;
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(24, 20, 15, 0.88) 0%, rgba(15, 13, 10, 0.92) 100%);
+  background: linear-gradient(135deg, rgba(24, 20, 15, 0.94) 0%, rgba(15, 13, 10, 0.97) 100%);
   border: 1px solid rgba(198, 169, 106, 0.34);
   box-shadow:
     0 14px 40px rgba(0, 0, 0, 0.48),
     inset 0 1px 0 rgba(255, 240, 204, 0.07);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   text-decoration: none;
   color: var(--text-primary);
   overflow: hidden;
@@ -283,12 +295,10 @@ header::after {
   border-radius: 18px;
   border: 1px solid rgba(198, 169, 106, 0.16);
   box-shadow:
-    0 22px 58px rgba(0, 0, 0, 0.55),
+    0 18px 44px rgba(0, 0, 0, 0.52),
     inset 0 1px 0 rgba(255, 244, 216, 0.05);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   color: var(--text-body);
-  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+  transition: border-color 0.25s ease;
 }
 
 /* Złota, subtelna linia światła u szczytu karty */
@@ -439,11 +449,9 @@ footer {
   margin: 48px auto 0;
   padding: 24px 28px;
   text-align: center;
-  background: linear-gradient(180deg, rgba(18, 16, 13, 0.84), rgba(11, 10, 8, 0.92));
+  background: linear-gradient(180deg, rgba(18, 16, 13, 0.93), rgba(11, 10, 8, 0.97));
   border: 1px solid var(--gold-line);
   border-radius: 16px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
   font-family: var(--font-sans);
   font-size: 0.78rem;
@@ -493,11 +501,9 @@ footer a:hover {
   padding: 26px 0;
   gap: 24px;
   z-index: 999;
-  background: linear-gradient(180deg, rgba(14, 12, 10, 0.92), rgba(9, 8, 7, 0.95));
+  background: linear-gradient(180deg, rgba(14, 12, 10, 0.96), rgba(9, 8, 7, 0.98));
   border-right: 1px solid rgba(198, 169, 106, 0.24);
   box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
 
   /* UKRYTY START */
   transform: translateX(-54px);
@@ -625,7 +631,6 @@ footer a:hover {
 @media (max-width: 768px) {
   body {
     padding: 0 14px 36px;
-    background-attachment: scroll;
   }
 
   header {

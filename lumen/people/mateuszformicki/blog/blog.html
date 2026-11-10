@@ -23,18 +23,15 @@ window.cookiehub.load(cpm);
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WYNZ1FP4B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2WYNZ1FP4B');
+  </script>
 </head>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2WYNZ1FP4B"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-2WYNZ1FP4B');
-</script>
-
 
 <body>
 
@@ -95,7 +92,7 @@ window.cookiehub.load(cpm);
           charakteru, mantrą, stało się wywodem ku mojemu przeznaczeniu.</p>
       </div>
       <div class="post-image">
-        <img src="gumy.jpg" alt="Myślami owiany">
+        <img src="gumy.jpg" alt="Myślami owiany" loading="lazy" decoding="async">
       </div>
     </div>
 
@@ -167,12 +164,17 @@ window.cookiehub.load(cpm);
         <span class="tooltip">e-Portfolio</span>
       </a>
 
+      <a href="../../../../index.html" class="sidebar-icon">
+        <img src="icons/elmoveicon.png" alt="Strona główna">
+        <span class="tooltip">Strona główna</span>
+      </a>
+
     </div>
 
   </main>
 
   <footer>
-    <p>&copy; 2025 Mateusz Formicki | <a href="../../../../index.html">Strona główna</a></p>
+    <p>&copy; 2025 Mateusz Formicki | <a href="../../../lumen.html">Lumen</a> | <a href="../../../../index.html">Strona główna</a></p>
   </footer>
 
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<script src="/elmove-app.js"></script>
+<script src="../elmove-app.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ELMOVE.CLOUD – Ruch Uniesienia</title>
@@ -175,8 +175,8 @@
 <body>
   <header>
     <h1>
-      <a href="/" id="home-link">
-        <img src="/images/elmovelogo.png" alt="EM" class="em-symbol" onerror="this.style.display='none'">
+      <a href="../index.html" id="home-link">
+        <img src="../images/elmovelogo.png" alt="EM" class="em-symbol" onerror="this.style.display='none'">
         ELMOVE.CLOUD
       </a>
       <span class="live-badge">LIVE</span>
@@ -505,7 +505,7 @@
     // Home link same window
     document.getElementById('home-link').addEventListener('click', (e) => {
       e.preventDefault();
-      window.location.href = '/index.html';
+      window.location.href = '../index.html';
     });
 
     // Init

@@ -1,11 +1,21 @@
 RewriteEngine On
 RewriteBase /
 
-# 301 ze starych adresów na nowe
-RewriteRule ^lumen/people/mateuszformicki/matforemport\.html$ /people/formmantcse [R=301,L,NC]
-RewriteRule ^lumen/people/mateuszformicki/blog/blog\.html$ /people/formmantcse/blog [R=301,L,NC]
-RewriteRule ^lumen/people/mateuszformicki/eportfolio/portfolio\.html$ /people/formmantcse/portfolio [R=301,L,NC]
-RewriteRule ^hyperclockhtml/hyperclock\.html$ /hyperclock [R=301,L,NC]
+# 301 ze starych adresów na nowe (tylko dla bezpośrednich żądań przeglądarki — zapobiega pętli 301)
+RewriteCond %{THE_REQUEST} \s/+lumen/people/mateuszformicki/matforemport\.html[\s?] [NC]
+RewriteRule ^ /people/formmantcse [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+lumen/people/mateuszformicki/blog/blog\.html[\s?] [NC]
+RewriteRule ^ /people/formmantcse/blog [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+lumen/people/mateuszformicki/blog/artefakty-samotnosci\.html[\s?] [NC]
+RewriteRule ^ /people/formmantcse/artefakty [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+lumen/people/mateuszformicki/eportfolio/portfolio\.html[\s?] [NC]
+RewriteRule ^ /people/formmantcse/portfolio [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+hyperclockhtml/hyperclock\.html[\s?] [NC]
+RewriteRule ^ /hyperclock [R=301,L]
 
 # maskowanie nowych adresów na rzeczywiste pliki
 RewriteRule ^people/formmantcse/?$ /lumen/people/mateuszformicki/matforemport.html [L,NC]
@@ -13,4 +23,3 @@ RewriteRule ^people/formmantcse/blog/?$ /lumen/people/mateuszformicki/blog/blog.
 RewriteRule ^people/formmantcse/artefakty/?$ /lumen/people/mateuszformicki/blog/artefakty-samotnosci.html [L,NC]
 RewriteRule ^people/formmantcse/portfolio/?$ /lumen/people/mateuszformicki/eportfolio/portfolio.html [L,NC]
 RewriteRule ^hyperclock/?$ /hyperclockhtml/hyperclock.html [L,NC]
-,NC]
