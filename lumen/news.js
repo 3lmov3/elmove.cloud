@@ -29,8 +29,9 @@ const news = [
 
 // Funkcja renderująca aktualności – najnowsze wpisy na górze
 function renderNews() {
-  const main = document.querySelector("main");
-  main.innerHTML = "<h2>Aktualności</h2>";
+  const list = document.getElementById("news-list");
+  if (!list) return;
+  list.innerHTML = "";
 
   news.slice().reverse().forEach((item, index) => {
     const article = document.createElement("article");
@@ -52,7 +53,7 @@ function renderNews() {
     article.appendChild(h3);
     article.appendChild(category);
     article.appendChild(p);
-    main.appendChild(article);
+    list.appendChild(article);
 
     // animacja z opóźnieniem
     setTimeout(() => {
