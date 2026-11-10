@@ -1,167 +1,569 @@
-/* Styl bloga w zgodzie z new-style.css */
+/* ==========================================================================
+   Formicki Blog — Nocne Sanktuarium Słowa
+   Estetyka spójna z uniwersum „Artefakty samotności” oraz Bibliothèque
+   ========================================================================== */
 
-/* Body z tłem statycznym */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  --bg-obsidian: #0b0a08;
+  --glass-top: rgba(20, 18, 14, 0.84);
+  --glass-bottom: rgba(12, 11, 9, 0.91);
+  --gold: #c6a96a;
+  --gold-bright: #ead6a0;
+  --gold-warm: #f2c879;
+  --gold-line: rgba(198, 169, 106, 0.22);
+  --gold-line-strong: rgba(198, 169, 106, 0.48);
+  --text-primary: #eee7da;
+  --text-body: #dfd7c8;
+  --text-muted: #9c9282;
+  --font-serif: 'Cormorant Garamond', 'EB Garamond', Garamond, Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --column-max: 840px;
+}
+
+/* Zaznaczenie tekstu i pasek przewijania */
+::selection {
+  background: rgba(198, 169, 106, 0.28);
+  color: #fff8ea;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-obsidian);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(198, 169, 106, 0.32) #0b0a08;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0a08;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(198, 169, 106, 0.3);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(198, 169, 106, 0.52);
+}
+
+/* Tło autorskie (obraz.png) otulone nocną winietą, by wydobyć głębię i czytelność */
 body {
-    background-image: url('obraz.png'); /* Twój obraz tła */
-    background-size: cover;             /* Dopasowanie do całego ekranu */
-    background-position: center center; /* Wyśrodkowanie */
-    background-repeat: no-repeat;       /* Bez powtarzania */
-    background-attachment: fixed;       /* Statyczne tło przy scrollowaniu */
-    font-family: 'Roboto', sans-serif;
-    color: #d1d1d1;
-    margin: 0;
-    padding: 0;
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 20px 48px;
+  font-family: var(--font-serif);
+  color: var(--text-body);
+  background-color: var(--bg-obsidian);
+  background-image:
+    radial-gradient(ellipse 80% 55% at 50% 12%, rgba(42, 30, 22, 0.38) 0%, rgba(12, 11, 9, 0.78) 68%, rgba(9, 8, 7, 0.92) 100%),
+    linear-gradient(180deg, rgba(12, 10, 9, 0.48) 0%, rgba(11, 10, 8, 0.76) 50%, rgba(9, 8, 7, 0.92) 100%),
+    url('obraz.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* Kontener bloga */
+/* Subtelna poświata u szczytu ekranu */
+body::before {
+  content: "";
+  position: fixed;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(920px, 95vw);
+  height: 280px;
+  background: radial-gradient(ellipse at center, rgba(218, 175, 98, 0.12), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   NAGŁÓWEK — Literacka winieta tytułowa
+   ========================================================================== */
+header {
+  position: relative;
+  z-index: 1;
+  max-width: var(--column-max);
+  margin: 42px auto 26px;
+  padding: 38px 32px 32px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(22, 19, 15, 0.82) 0%, rgba(13, 12, 9, 0.90) 100%);
+  border: 1px solid var(--gold-line);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 243, 214, 0.07);
+  overflow: hidden;
+}
+
+/* Nadtytuł wydawniczy generowany czystym CSS */
+header::before {
+  content: "MATEUSZ FORMICKI  ·  NOTATNIK MYŚLI I SŁOWA";
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  color: var(--gold);
+  opacity: 0.85;
+  margin-bottom: 12px;
+}
+
+header h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.35rem, 5vw, 3.35rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.08;
+  color: var(--gold-bright);
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.65);
+}
+
+/* Sygnet rombu z tomiku „Artefakty samotności” pod tytułem bloga */
+header::after {
+  content: "—  ◇  —";
+  display: block;
+  margin-top: 14px;
+  font-family: var(--font-serif);
+  font-size: 0.86rem;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  opacity: 0.72;
+}
+
+/* ==========================================================================
+   KONTENER BLOGA
+   ========================================================================== */
 .blog-container {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 0 20px;
+  position: relative;
+  z-index: 1;
+  max-width: var(--column-max);
+  margin: 0 auto;
+  padding: 0;
+  counter-reset: wpis;
 }
 
-/* Wpisy bloga */
+/* ==========================================================================
+   SUBTELNY SZEPT-ODNOŚNIK DO TOMIKU POEZJI
+   ========================================================================== */
+.tomik-whisper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px 26px;
+  margin: 0 0 38px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(24, 20, 15, 0.88) 0%, rgba(15, 13, 10, 0.92) 100%);
+  border: 1px solid rgba(198, 169, 106, 0.34);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 240, 204, 0.07);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  text-decoration: none;
+  color: var(--text-primary);
+  overflow: hidden;
+  transition:
+    border-color 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+}
+
+/* Delikatna smuga światła przechodząca przy najechaniu */
+.tomik-whisper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 50%, rgba(234, 214, 160, 0.10), transparent 55%);
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.tomik-whisper:hover {
+  border-color: var(--gold-line-strong);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.62),
+    0 0 28px rgba(198, 169, 106, 0.12);
+  transform: translateY(-2px);
+}
+
+.tomik-whisper:hover::before {
+  opacity: 1;
+}
+
+.tomik-whisper__ornament {
+  flex: 0 0 auto;
+  color: var(--gold);
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  opacity: 0.85;
+}
+
+.tomik-whisper__text {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 9px;
+  font-size: 1.16rem;
+  letter-spacing: 0.02em;
+}
+
+.tomik-whisper__title {
+  color: var(--gold-bright);
+  font-weight: 500;
+}
+
+.tomik-whisper__title em {
+  font-style: italic;
+  color: var(--gold-warm);
+}
+
+.tomik-whisper__divider {
+  color: rgba(198, 169, 106, 0.45);
+}
+
+.tomik-whisper__subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: #bfb5a3;
+  font-size: 1.05rem;
+}
+
+.tomik-whisper__cta {
+  flex: 0 0 auto;
+  font-family: var(--font-sans);
+  font-size: 0.71rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(198, 169, 106, 0.28);
+  background: rgba(198, 169, 106, 0.06);
+  white-space: nowrap;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.tomik-whisper:hover .tomik-whisper__cta {
+  background: rgba(198, 169, 106, 0.16);
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  transform: translateX(2px);
+}
+
+/* ==========================================================================
+   WPISY BLOGA — Karty nocnego dziennika
+   ========================================================================== */
 .blog-post {
-    background-color: rgba(51, 51, 51, 0.85); /* lekka przezroczystość */
-    padding: 25px;
-    margin-bottom: 40px;
-    border-radius: 15px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 50px 5px rgba(0,0,0,0.5);
-    color: #d1d1d1;
+  counter-increment: wpis;
+  position: relative;
+  background: linear-gradient(168deg, var(--glass-top) 0%, var(--glass-bottom) 100%);
+  padding: 44px 52px 42px;
+  margin-bottom: 36px;
+  border-radius: 18px;
+  border: 1px solid rgba(198, 169, 106, 0.16);
+  box-shadow:
+    0 22px 58px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 244, 216, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--text-body);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
 }
 
+/* Złota, subtelna linia światła u szczytu karty */
+.blog-post::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 52px;
+  right: 52px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(234, 214, 160, 0.42), transparent);
+  opacity: 0.55;
+  transition: opacity 0.35s ease;
+}
+
+/* Dyskretna numeracja wpisu w prawym górnym narożniku */
+.blog-post::after {
+  content: "§ " counter(wpis, decimal-leading-zero);
+  position: absolute;
+  top: 26px;
+  right: 34px;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: rgba(198, 169, 106, 0.36);
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+.blog-post:hover {
+  border-color: rgba(198, 169, 106, 0.32);
+  box-shadow:
+    0 26px 68px rgba(0, 0, 0, 0.66),
+    inset 0 1px 0 rgba(255, 244, 216, 0.08);
+}
+
+.blog-post:hover::before {
+  opacity: 0.95;
+}
+
+.blog-post:hover::after {
+  color: rgba(234, 214, 160, 0.65);
+}
+
+/* Tytuł wpisu */
 .blog-post .post-title {
-    font-size: 2em;
-    color: #f5a623;
-    margin-bottom: 10px;
+  margin: 0 0 10px;
+  padding-right: 48px;
+  font-family: var(--font-serif);
+  font-size: clamp(1.78rem, 3.2vw, 2.32rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.015em;
+  color: var(--gold-bright);
 }
 
+/* Data wpisu z subtelną linią oddzielającą */
 .blog-post .post-date {
-    font-size: 0.9em;
-    color: #a0a0a0;
-    margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 26px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(198, 169, 106, 0.13);
+  font-family: var(--font-sans);
+  font-size: 0.73rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.blog-post .post-date::before {
+  content: "◇";
+  color: var(--gold);
+  font-size: 0.72rem;
+  opacity: 0.85;
+}
+
+/* Treść wpisu */
+.blog-post .post-content::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .blog-post .post-content p {
-    font-size: 1.2em;
-    line-height: 1.6;
+  margin: 0 0 1.18em;
+  font-family: var(--font-serif);
+  font-size: 1.26rem;
+  line-height: 1.86;
+  letter-spacing: 0.01em;
+  color: var(--text-body);
 }
 
+.blog-post .post-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Szlachetny inicjał wydawniczy w pierwszym akapicie każdego wpisu */
+.blog-post .post-content p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 3.15em;
+  line-height: 0.82;
+  padding: 4px 12px 0 0;
+  color: var(--gold-bright);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   OBRAZY WE WPISACH — Oprawa ciemni fotograficznej
+   ========================================================================== */
 .post-image {
   text-align: center;
-  margin: 20px 0;
+  margin: 30px auto 4px;
+  max-width: 580px;
+  padding: 10px;
+  background: rgba(8, 7, 6, 0.68);
+  border: 1px solid rgba(198, 169, 106, 0.20);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.52);
+  overflow: hidden;
 }
 
 .post-image img {
-  max-width: 120x; /* możesz zmienić np. na 400px lub 100% */
+  display: block;
   width: 100%;
+  max-width: 100%;
   height: auto;
   border-radius: 8px;
+  filter: contrast(1.03) saturate(0.96);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
 }
 
-/* Nagłówek */
-header {
-    text-align: center;
-    background-color: rgba(51,51,51,0.9);
-    padding: 30px 0;
-    font-size: 2.2em;
-    color: #f5a623;
-    border-radius: 10px;
-    margin-bottom: 30px;
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+.post-image:hover img {
+  transform: scale(1.015);
+  filter: contrast(1.05) saturate(1.02);
 }
 
-/* Stopka */
+/* ==========================================================================
+   STOPKA
+   ========================================================================== */
 footer {
-    text-align: center;
-    padding: 15px;
-    background-color: rgba(51, 51, 51, 0.9);
-    color: white;
-    border-radius: 10px;
-    margin-top: 50px;
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+  position: relative;
+  z-index: 1;
+  max-width: var(--column-max);
+  margin: 48px auto 0;
+  padding: 24px 28px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(18, 16, 13, 0.84), rgba(11, 10, 8, 0.92));
+  border: 1px solid var(--gold-line);
+  border-radius: 16px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+footer::before {
+  content: "◇";
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gold);
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+footer p {
+  margin: 0;
 }
 
 footer a {
-    color: #f5a623;
-    text-decoration: none;
+  color: var(--gold-bright);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(234, 214, 160, 0.3);
+  padding-bottom: 1px;
+  transition: color 0.25s ease, border-color 0.25s ease;
 }
 
 footer a:hover {
-    color: #ffffff;
+  color: #ffffff;
+  border-bottom-color: var(--gold-bright);
 }
 
-/* Responsywność */
-@media (max-width: 768px) {
-    .blog-post {
-        padding: 20px;
-    }
-    header {
-        font-size: 1.8em;
-        padding: 20px 0;
-    }
-}
-
+/* ==========================================================================
+   BOCZNY PASEK NAWIGACJI (.sidebar) — Funkcjonalność zachowana, szlachetny szlif
+   ========================================================================== */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
-
   height: 100vh;
-  width: 70px;
-
+  width: 72px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-
-  padding: 20px 0;
-  gap: 30px;
-
+  padding: 26px 0;
+  gap: 24px;
   z-index: 999;
-
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(12px);
+  background: linear-gradient(180deg, rgba(14, 12, 10, 0.92), rgba(9, 8, 7, 0.95));
+  border-right: 1px solid rgba(198, 169, 106, 0.24);
+  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 
   /* UKRYTY START */
-  transform: translateX(-52px);
-  transition: transform 0.25s ease;
+  transform: translateX(-54px);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
 }
 
-/* wysunięcie po hoverze */
+/* Wysunięcie po najechaniu */
 .sidebar:hover {
   transform: translateX(0);
+  border-right-color: rgba(198, 169, 106, 0.45);
 }
 
-/* „trigger area” – cienki pasek zawsze widoczny */
+/* „Trigger area” — cienki pasek zawsze czuły na kursor */
 .sidebar::before {
   content: "";
   position: absolute;
-  right: -10px;
+  right: -12px;
   top: 0;
-
-  width: 10px;
+  width: 12px;
   height: 100%;
-
   background: transparent;
 }
 
-/* ICONS */
+/* Subtelny złoty znacznik na widocznej krawędzi schowanego paska */
+.sidebar::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 44px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, transparent, rgba(198, 169, 106, 0.55), transparent);
+  opacity: 0.85;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.sidebar:hover::after {
+  opacity: 0;
+}
+
+/* IKONY W SIDEBARZE */
 .sidebar-icon {
   position: relative;
-  width: 40px;
-  height: 40px;
-
+  width: 42px;
+  height: 42px;
   display: flex;
   justify-content: center;
   align-items: center;
-
+  border-radius: 11px;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .sidebar-icon:hover {
-  transform: scale(1.15);
+  transform: scale(1.1);
+  background: rgba(198, 169, 106, 0.10);
+  border-color: rgba(198, 169, 106, 0.32);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .sidebar-icon img {
@@ -170,54 +572,109 @@ footer a:hover {
   object-fit: contain;
 }
 
+.sidebar-icon--tomik img {
+  filter: drop-shadow(0 0 6px rgba(234, 200, 128, 0.42));
+}
+
 /* TOOLTIP */
 .tooltip {
   position: absolute;
-  left: 60px;
+  left: 58px;
   top: 50%;
-  transform: translateY(-50%);
-
-  padding: 6px 10px;
-
-  background: rgba(10, 10, 10, 0.95);
-  color: #e8eefc;
-
-  font-size: 12px;
-  border-radius: 6px;
-
+  transform: translateY(-50%) translateX(-4px);
+  padding: 6px 12px;
+  background: rgba(14, 12, 10, 0.96);
+  border: 1px solid rgba(198, 169, 106, 0.34);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  color: var(--gold-bright);
+  font-family: var(--font-sans);
+  font-size: 0.73rem;
+  letter-spacing: 0.05em;
+  border-radius: 7px;
   white-space: nowrap;
-
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 .sidebar-icon:hover .tooltip {
   opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
+/* ==========================================================================
+   RESPONSYWNOŚĆ (Tablety i telefony)
+   ========================================================================== */
 @media (max-width: 900px) {
-
   .sidebar {
-    transform: translateX(-55px);
+    transform: translateX(-57px);
   }
 
-  /* jak dotkniesz/klikniesz lewą stronę */
-  .sidebar:active {
+  .sidebar:active,
+  .sidebar:focus-within {
     transform: translateX(0);
   }
 
-  /* albo stałe lekkie „ucho” */
   .sidebar::after {
-    content: "";
-    position: absolute;
-    right: -6px;
-    top: 40%;
+    right: 4px;
+    height: 64px;
+    background: linear-gradient(180deg, transparent, rgba(234, 214, 160, 0.65), transparent);
+  }
+}
 
-    width: 6px;
-    height: 20%;
+@media (max-width: 768px) {
+  body {
+    padding: 0 14px 36px;
+    background-attachment: scroll;
+  }
 
-    background: rgba(77,163,255,0.25);
-    border-radius: 10px;
+  header {
+    margin: 22px auto 20px;
+    padding: 28px 20px 24px;
+  }
+
+  header::before {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+  }
+
+  .tomik-whisper {
+    padding: 14px 18px;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .tomik-whisper__ornament {
+    display: none;
+  }
+
+  .tomik-whisper__cta {
+    margin-left: auto;
+  }
+
+  .blog-post {
+    padding: 30px 22px 28px;
+    margin-bottom: 24px;
+    border-radius: 15px;
+  }
+
+  .blog-post::before {
+    left: 22px;
+    right: 22px;
+  }
+
+  .blog-post::after {
+    top: 18px;
+    right: 20px;
+  }
+
+  .blog-post .post-content p {
+    font-size: 1.15rem;
+    line-height: 1.78;
+  }
+
+  .blog-post .post-content p:first-of-type::first-letter {
+    font-size: 2.75em;
   }
 }

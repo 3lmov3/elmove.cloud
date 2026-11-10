@@ -10,5 +10,6 @@ RewriteRule ^hyperclockhtml/hyperclock\.html$ /hyperclock [R=301,L,NC]
 # maskowanie nowych adresów na rzeczywiste pliki
 RewriteRule ^people/formmantcse/?$ /lumen/people/mateuszformicki/matforemport.html [L,NC]
 RewriteRule ^people/formmantcse/blog/?$ /lumen/people/mateuszformicki/blog/blog.html [L,NC]
+RewriteRule ^people/formmantcse/artefakty/?$ /lumen/people/mateuszformicki/blog/artefakty-samotnosci.html [L,NC]
 RewriteRule ^people/formmantcse/portfolio/?$ /lumen/people/mateuszformicki/eportfolio/portfolio.html [L,NC]
 RewriteRule ^hyperclock/?$ /hyperclockhtml/hyperclock.html [L,NC]

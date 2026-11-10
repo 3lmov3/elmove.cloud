@@ -14,7 +14,7 @@ html, body {
     rgba(15, 15, 20, 0.92),
     rgba(5, 5, 10, 0.95)
   ),
-  url('media/background_body.webp') center/cover fixed;
+  url('media/background_body.png') center/cover fixed;
 
   background-image: linear-gradient(
     to bottom,
@@ -23,7 +23,7 @@ html, body {
   ),
   image-set(
     url('media/background_body.webp') type('image/webp'),
-    url('media/background_body.webp') type('image/webp')
+    url('media/background_body.png') type('image/png')
   );
 
   color: #e6e6e6;
@@ -302,7 +302,7 @@ body {
     linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.35)),
     image-set(
       url('media/background1.webp') type('image/webp'),
-      url('media/background1.webp') type('image/webp')
+      url('media/background1.png') type('image/png')
     );
 }
 
@@ -311,7 +311,7 @@ body {
     linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.35)),
     image-set(
       url('media/background2.webp') type('image/webp'),
-      url('media/background2.webp') type('image/webp')
+      url('media/background2.png') type('image/png')
     );
 }
 
@@ -320,7 +320,7 @@ body {
     linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.35)),
     image-set(
       url('media/background3.webp') type('image/webp'),
-      url('media/background3.webp') type('image/webp')
+      url('media/background3.png') type('image/png')
     );
 }
 
@@ -329,7 +329,7 @@ body {
     linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.35)),
     image-set(
       url('media/background4.webp') type('image/webp'),
-      url('media/background4.webp') type('image/webp')
+      url('media/background4.png') type('image/png')
     );
 }
 
@@ -338,7 +338,7 @@ body {
     linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.35)),
     image-set(
       url('media/background5.webp') type('image/webp'),
-      url('media/background5.webp') type('image/webp')
+      url('media/background5.png') type('image/png')
     );
 }
 
@@ -347,7 +347,7 @@ body {
     linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.35)),
     image-set(
       url('media/background6.webp') type('image/webp'),
-      url('media/background6.webp') type('image/webp')
+      url('media/background6.png') type('image/png')
     );
 }
 
